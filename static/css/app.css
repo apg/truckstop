@@ -1,0 +1,101 @@
+body {
+ font-size: 62.5%;
+ font-family: "Helvetica", "Arial", sans-serif;
+ color: #333333;
+ padding: 0; margin: 0;
+}
+
+.clearfix:after {
+ content: "."; 
+ display: block; 
+ height: 0; 
+ clear: both; 
+ visibility: hidden;
+}
+.clearfix { display: inline-block; }
+/* \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* */
+
+
+.wrapper {
+ text-align: center;
+}
+
+.header {
+ text-align: left;
+ margin: 0 auto; 
+ width: 790px;
+}
+
+.logo {
+ margin: 0;
+ padding: 0;
+ height: 48px;
+ width: 170px;
+ text-indent: -9999em;
+ background: url(/static/img/sprites.png) no-repeat;
+ float: left;
+}
+
+.search {
+ display: block;
+ float: right;
+ width: 500px;
+ text-align: right;
+}
+.search input {
+ padding: 0; margin: 0;
+ font-size: 2.4em;
+ color: #333340;
+ border: 1px solid #888; 
+ -moz-box-shadow: 0 0 2px #888;
+ -webkit-box-shadow: 0 0 2px #888;
+ box-shadow: 0 0 2px #888;
+ vertical-align: baseline;
+}
+.search button {
+ padding: 0; margin: 0;
+ vertical-align: baseline;
+ border: 1px solid #888;
+}
+.go {
+ width: 28px;
+ height: 28px;
+ background: url(/static/img/sprites.png) -170px -0px no-repeat;
+ background-position: -171px -0px;
+}
+
+#map {
+ position: static;
+ width: 100%;
+ height: 500px;
+}
+
+.map-scrolling {
+ margin: 0; padding: 0;
+ position: absolute;
+ -moz-box-shadow: 2px 0 8px 3px #888;
+ -webkit-box-shadow: 2px 0 8px 3px #888;
+ box-shadow: 2px 0 8px 3px  #888;
+ z-index: 10000;
+}
+
+.result-list {
+ text-align: left;
+ margin: 0 auto; 
+ position: relative;
+ top: -40px;
+ width: 790px;
+ height: 400px;
+ z-index: 1000;
+ background: #fff;
+
+ display: none;
+
+ -moz-box-shadow: 0 -2px 2px #888;
+ -webkit-box-shadow: 0 -2px 2px #888;
+ box-shadow: 0 -2px 2px #888;
+
+}

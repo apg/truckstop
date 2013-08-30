@@ -200,19 +200,26 @@ class DocumentIndex(object):
                 self._inverted_index[w].add(d)
         return f
 
-    def _candidate_documents(self, doc):
+    def _candidate_documents(self, doc, keys=None):
         """Return only the documents from the index which actually
-        contain a word in `doc`"""
+        contain a word in `doc`
+
+        If keys is specified, only check those specified by `keys`"""
 
         docs = set()
         for w in doc._frequencies:
-            docs.update(self._inverted_index[w])
+            if keys:
+                for d in self._inverted_index[w]:
+                    if d.key in keys:
+                        docs.add(doc)
+            else:
+                docs.update(self._inverted_index[w])
 
         return docs
 
-    def query(self, doc, max_results=10, distance=fdot_product):
+    def query(self, doc, max_results=10, distance=fdot_product, keys=None):
         results = []
-        for d in self._candidate_documents(doc):
+        for d in self._candidate_documents(doc, keys=keys):
             dist = distance(doc, d)
             if dist == 0:
                 dist = inf
