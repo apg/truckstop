@@ -24,6 +24,7 @@ body {
 }
 
 .header {
+ padding-top: 10px;
  text-align: left;
  margin: 0 auto; 
  width: 790px;
@@ -85,17 +86,60 @@ body {
 .result-list {
  text-align: left;
  margin: 0 auto; 
+ padding-top: 30px;
  position: relative;
  top: -40px;
  width: 790px;
  height: 400px;
  z-index: 1000;
  background: #fff;
-
  display: none;
-
  -moz-box-shadow: 0 -2px 2px #888;
  -webkit-box-shadow: 0 -2px 2px #888;
  box-shadow: 0 -2px 2px #888;
+}
+.result-list h2 {
+ margin: 20px 30px 10px 30px;
+}
+.result-list dl {
+ display: block;
+ margin: 5px 25px 5px 25px;
+ padding: 5px;
+}
 
+.hover-state {
+ background-color: #ffc;
+}
+
+.result-list dt {
+ line-height: 2.4em;
+}
+.result-list dd {
+ margin-top: 6px;
+ margin-left: 68px;
+}
+.result-list dd p {
+ margin: 3px 0 0 0;
+}
+
+.result-list .distance {
+ display: block;
+ width: 60px;
+ font-size: 1.6em;
+ vertical-align: baseline;
+ text-align: right;
+ float: left;
+}
+
+.result-list .name {
+ font-size: 2.4em;
+ display: block;
+ margin-left: 68px;
+}
+.result-list .address {
+ font-size: 1.2em;
+ text-transform: capitalize;
+}
+.result-list p {
+ font-size: 1.6em;
 }

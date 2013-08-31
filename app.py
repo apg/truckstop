@@ -28,12 +28,8 @@ def mk_static(route_base):
 mk_static('/static/js')
 mk_static('/static/css')
 mk_static('/static/img')
-                 
 
-
-
-
-@route('/api/v1/search\.json')
+@route('/api/v1/search.json')
 @param_validator(lat=(float, "Invalid Latitude"),
                  lon=(float, "Invalid Longitude"),
                  radius=(float, None),
@@ -51,21 +47,33 @@ def api_search(lat=None, lon=None, radius=10,
         raise ValueError("page must be > 0")
     if per_page <= 0 or per_page > 50:
         raise ValueError("per page must be between 0 and 50")
+
                 
     results = SPATIAL_INDEX.search((lat, lon), radius)
+    distances = dict((v, k) for k, v in results)
+    textscores = {}
 
     if query and results:
         keys = set(x[1] for x in results)
         results = TEXT_INDEX.query(Query(query), keys=keys)
-    
+        scores = dict((v, k) for k, v in results)
+
     # we also need to keep the correct distances from above.z
     # do paging now, then get the correct objects from the OBJECT_STORE
 
+    objects = []
+    for s, oid in results:
+        o = OBJECT_STORE.get(oid)
+        if o:
+            o = o.copy()
+            o['Address'] = o['Address'].title()
+            o['distance'] = distances.get(oid, 10000)
+            o['distance_desc'] = '%.2fmi' % distances.get(oid, 10000)
+            objects.append(o.copy())
 
+    return {'venues': sorted(objects, key=lambda x: x['distance'])}
 
-    return {'venues': []}
-
-@route('/api/v1/roulette\.json')
+@route('/api/v1/roulette.json')
 def api_roulette():
     return {'venues': []}
 
