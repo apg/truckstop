@@ -77,9 +77,10 @@ $(function() {
 
   var getSearchResults = function(query, dcb, ecb) {
     var req = $.getJSON('/api/v1/search.json', {
-        'query': query,
+        'query': query.query,
         'lat': CURRENT_LOCATION[0],
-        'lon': CURRENT_LOCATION[1]
+        'lon': CURRENT_LOCATION[1],
+        'radius': query.radius
         }).done(dcb);
     if (ecb) {
       req.fail(ecb);
@@ -116,9 +117,23 @@ $(function() {
     if (event.which == 13) {
       event.preventDefault();
       resetEverything();
-      var query = $('.search input').val();
+      var radius = 5, query = '';
+      var bits = $('.search input').val().split(' ');
 
-      getSearchResults(query, function(results) {
+      for (var i = 0; i < bits.length; i++) {
+         if (bits[i].indexOf('within:') == 0) {
+           var pieces = bits[i].split(':')
+           var tr = parseInt(pieces[1]);
+           if (tr !== NaN) {
+              radius = tr;
+           }
+         }
+         else {
+           query += bits[i] + ' ';
+         }
+      }
+
+      getSearchResults({'query': query, 'radius': radius}, function(results) {
         if (results.venues) {
           // render a template to put in the result-list.innerHTML
           for (var i = 0; i < results.venues.length; i++) {

@@ -4,7 +4,6 @@ body {
  color: #333333;
  padding: 0; margin: 0;
 }
-
 .clearfix:after {
  content: "."; 
  display: block; 
@@ -17,7 +16,6 @@ body {
 * html .clearfix { height: 1%; }
 .clearfix { display: block; }
 /* */
-
 
 .wrapper {
  text-align: center;
@@ -154,4 +152,16 @@ body {
 }
 .result-list p {
  font-size: 1.6em;
+}
+
+.footer {
+ clear: both;
+ display: block;
+ width: 600px;
+ margin: 30px auto;
+ display: block;
+ border-top: 1px solid #eee;
+ padding: 20px 0;
+ font-size: 1.6em;
+ text-align: center;
 }
