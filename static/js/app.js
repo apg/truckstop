@@ -128,7 +128,7 @@ $(function() {
               return function(e) {
                  MARKERS[v['ObjectID']].setIcon(HIGHLIGHT_ICON);
                  var off = $('#anchor-' + v['ObjectID']).offset();
-                 $(window).scrollTop(off.top - 220);
+                 $(window).scrollTop(off.top - 320);
                  $('#anchor-' + v['ObjectID']).addClass('hover-state');
               }})(venue));
             MARKERS[venue['ObjectID']].on('mouseout', (function (v) {
@@ -139,7 +139,7 @@ $(function() {
 
           }
 
-          $('#map').css({'height': '200px'});
+          $('#map').css({'height': '300px'});
           MAP.invalidateSize();
           $('.result-list').css({'display': 'block'}).html(RESULT_TEMPLATE({ 'venues': results.venues }));
         }
