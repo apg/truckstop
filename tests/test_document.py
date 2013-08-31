@@ -34,7 +34,7 @@ class TestDocumentFrequencies(unittest.TestCase):
         self.assertEquals(self.buffaloDocument.total_words, 6,
                           "The buffalo document has 6 words in total")
 
-        self.assertEquals(self.sampleDocument.total_words, 9,
+        self.assertEquals(self.sampleDocument.total_words, 7,
                           "The sample document has 9 words in total")
 
 

@@ -4,20 +4,23 @@ This module defines two types of indexes, and then combines them into
 a single index that can be queried with lots of different options.
 
 First, we have a text index, DocumentIndex. This is done quite simply
-by utilizing dot products of term frequencies across the set of
-documents.  It's more or less a "poor man's text index" and requires
-that we iterate over all documents per query. As such, we'll
-prioritize the Spatial index first when possible.
+by utilizing dot products of TF-IDF values of word vectors. TF-IDF
+ensures that frequent words in the document corpus become less 
+important factors when doing the dot product, emphasizing more 
+obscure words. 
 
-There are a number of improvements to be made here. First, a search
-for "tea" won't bring up "teas" or "iced-tea." The first example could
-be solved by stemming all the words, making "teas" be stored as "tea",
-and therefore counting towards an additional occurance of "tea." An
-example algorithm for doing this is Porter. I haven't included this 
-here (though this documentation may be out of date if I can find an
-implementation -- it's rather complicated to implement just for this
-exercise).
+Every word is first stemmed before being counted. This means that 
+'teas' and 'tea' both count under 'tea,' and it also means that our
+queries are a bit more forgiving. Maybe a venue serves "cupcakes" but
+we searched for "cupcake." Without stemming, our naive index wouldn't
+find "cupcakes," and therefore, we'd miss the venue.
 
+We also keep an inverted index to speed up the query process. The 
+inverted index maps words to documents that contain that word. 
+Therefore, when querying "chocolate cupcakes" we only consider 
+documents in the corpus that have either the word "chocolate" or the
+word "cupcake" in them. That takes us from possibly hundreds of 
+documents to 8 or 9 in many cases on our dataset.
 
 The second index type is for spatial searches. Since Food Trucks in SF
 (I assume given the data) are permitted to operate at set locations,
@@ -26,21 +29,26 @@ can easily build a KD-Tree (though other types of trees, such as an
 Octree or Quad-tree would work) to eliminate trucks from our search
 that are out of range.
 
-In reality, searching for food trucks essentially comes down to this:
+Then, our search for food trucks given a lat, lon, a radius and a 
+text query goes like this:
 
-  - If given a max travel distance, find trucks within that range.
-  - Of that set, keep the ones that the text query keeps
-  - Order by some combined score (maybe prioritize distance over 
-    relevance)
+  - Use the spatial index to find venues within `radius` of `(lat, lon)`
+  - Perform a text search for `query` limiting the corpus to only those
+    venues returned from the spatial query.
+  - Order by distance.
 
-One can expand upon this by expanding the travel distance and offering
-places that match the search terms, specifying to the user "We didn't
-find anything in your range, but these things are just a bit
-further...".
+One can make this ordering better by considering the relevance of the
+text query. However, given that we're not considering other important
+parameters such as where a word appears in the document (it's likely
+that words appearing earlier in the document are more relevant), or
+whether or not all the words in the query appear together (e.g. 
+"chocolate cupcakes" vs. "chocolate" or "cupcakes"). Thus, our 
+relevance metric is rather naive, and we opt only to order via distance.
 
 """
 
 from collections import defaultdict
+from stemming.porter2 import stem
 
 import re
 import math
@@ -76,7 +84,7 @@ STOP_WORDS = set([
 def word_splitter(s):
     if isinstance(s, list):
         return s
-    return filter(None, map(lambda x: x.strip().lower(), 
+    return filter(None, map(lambda x: x.strip().lower(),
                             re.split("[^a-zA-Z0-9-]+", s)))
 
 
@@ -136,9 +144,9 @@ class Document(object):
 
     def __init__(self, key, words):
         self._key = key
-        words = word_splitter(words)
-        self._frequencies = self._compute_frequencies(
-            filter(lambda x: x not in STOP_WORDS, words))
+        words = filter(lambda x: x not in STOP_WORDS, word_splitter(words))
+        words = map(stem, words)
+        self._frequencies = self._compute_frequencies(words)
         self._total_word_count = len(words)
         
         fv = self._frequencies.values()
@@ -149,7 +157,7 @@ class Document(object):
         return self._key
 
     def freq(self, w, default=0):
-        return self._frequencies.get(w.lower(), default)
+        return self._frequencies.get(stem(w.lower()), default)
 
     @property
     def max_freq(self):
@@ -187,7 +195,7 @@ class DocumentIndex(object):
 
 
     def doc_freq(self, w, default=1):
-        return self._document_frequencies.get(w, default)
+        return self._document_frequencies.get(stem(w.lower()), default)
 
     def __len__(self):
         return len(self._documents)
@@ -211,7 +219,7 @@ class DocumentIndex(object):
             if keys:
                 for d in self._inverted_index[w]:
                     if d.key in keys:
-                        docs.add(doc)
+                        docs.add(d)
             else:
                 docs.update(self._inverted_index[w])
 
@@ -219,6 +227,7 @@ class DocumentIndex(object):
 
     def query(self, doc, max_results=10, distance=fdot_product, keys=None):
         results = []
+
         for d in self._candidate_documents(doc, keys=keys):
             dist = distance(doc, d)
             if dist == 0:
