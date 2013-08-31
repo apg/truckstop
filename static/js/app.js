@@ -68,7 +68,9 @@ $(function() {
       cb([parseFloat(query['lat']), parseFloat(query['lon'])]);
     }
     else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(cb);
+      navigator.geolocation.getCurrentPosition(function(x) {
+        cb([x.coords.latitude, x.coords.longitude]);
+      });
     }
     else {
       cb(DEFAULT_LOCATION);
@@ -96,7 +98,7 @@ $(function() {
   
   // center the map on our current position
   getPosition(function(position) {
-    MAP.setView(position, 13);
+    MAP.panTo(position);
     CURRENT_LOCATION = position;
 
     var here = L.icon({
