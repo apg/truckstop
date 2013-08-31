@@ -107,6 +107,18 @@ body {
  padding: 5px;
 }
 
+.clear-button {
+ position: relative;
+ left: 760px;
+ top: -40px;
+ font-size: 2.4em;
+ line-height: 2.6em;
+ text-align: center;
+ display: block;
+ width: 26px;
+ height: 26px;
+}
+
 .hover-state {
  background-color: #ffc;
 }
