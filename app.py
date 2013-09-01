@@ -21,7 +21,6 @@ TEXT_DISTANCE_FUNC = None
 
 def mk_static(route_base):
     def s(filename):
-        print >>sys.stderr, filename, route_base, os.path.abspath('.' + route_base)
         return static_file(filename, root=os.path.abspath('.' + route_base))
     return route(os.path.join(route_base,'<filename>'))(s)
 
@@ -123,6 +122,5 @@ if __name__ == '__main__':
     TEXT_DISTANCE_FUNC = mk_tfidf_dot(TEXT_INDEX)
 
     print "Starting app on %(host)s:%(port)d..." % params
-
 
     run(**params)

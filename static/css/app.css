@@ -28,6 +28,20 @@ body {
  width: 790px;
 }
 
+.header .about {
+ display: block;
+ float: right;
+ height: 48px;
+ width: 100px;
+ text-align: center;
+ line-height: 48px;
+ font-size: 2.2em;
+}
+.header .about a {
+ color: #333340;
+ text-decoration: none;
+}
+
 .logo {
  margin: 0;
  padding: 0;
@@ -47,7 +61,7 @@ body {
 .search {
  display: block;
  float: right;
- width: 500px;
+ width: 300px;
  text-align: right;
 }
 .search input {
@@ -58,7 +72,7 @@ body {
  -moz-box-shadow: 0 0 2px #888;
  -webkit-box-shadow: 0 0 2px #888;
  box-shadow: 0 0 2px #888;
- vertical-align: baseline;
+ vertical-align: sub;
 }
 .search button {
  padding: 0; margin: 0;
