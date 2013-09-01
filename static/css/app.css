@@ -38,6 +38,12 @@ body {
  float: left;
 }
 
+.logo a {
+ display:block;
+ height:48px;
+ width:170px;
+}
+
 .search {
  display: block;
  float: right;
@@ -58,12 +64,6 @@ body {
  padding: 0; margin: 0;
  vertical-align: baseline;
  border: 1px solid #888;
-}
-.go {
- width: 28px;
- height: 28px;
- background: url(/static/img/sprites.png) -170px -0px no-repeat;
- background-position: -171px -0px;
 }
 
 #map {
@@ -164,4 +164,12 @@ body {
  padding: 20px 0;
  font-size: 1.6em;
  text-align: center;
+}
+
+.page {
+ display: block;
+ margin: 0 auto;
+ width: 600px;
+ text-align: left;
+ font-size: 1.6em;
 }

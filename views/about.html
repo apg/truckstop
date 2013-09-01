@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+   <title>Truckstop: About</title>
+   <link rel="stylesheet" type="text/css" href="/static/css/app.css" />
+</head>
+<body>
+   <div class="wrapper">
+      <div class="header clearfix">
+         <span class="about">
+            <a href="/about.html">About</a>
+         </span>
+         <h1 class="logo"><a href="/">Truckstop</a></h1>
+      </div>
+
+
+      <div class="page">
+         <h2>About Truckstop</h2>
+
+         <p>Truckstop is a code challenge, originally developed for an <a href="https://github.com/uber/coding-challenge-tools">Uber Coding Challenge</a>. It provides a simple search interface to food trucks in San Francisco, using the data (though it's not continually updated) from <a href="https://data.sfgov.org/Permitting/Mobile-Food-Facility-Permit/rqzj-sfat">here</a>.</p>
+
+
+         <p>The site doesn't use a typical relational database. Instead, it opts for storing all the data in a Python dictionary. It indexes the contents of this dictionary with two special purposes indexes&mdash;a spatial index and a text index.</p>
+
+         <p>The spatial index stores latitude, longitude pairs along with an object id in a <a href="http://r.duckduckgo.com/l/?kh=-1&uddg=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2Fkd-tree">kd-tree</a>, which is a binary tree that alternates between x and y values of the coordinates for how it does branching. The result, is that we get very efficient lookups for geographical data.</p>
+
+         <p>The text index uses a frequency based approach and <a href="https://en.wikipedia.org/wiki/Tf-idf">TF-IDF</a> to index the text. TF-IDF values for each word in a query are computed on each candidate document, and the dot product of the formed vectors is computed giving us a relevancy score. The approach is rather naive, but it does take into consideration that 'food' is not as important as a word such as 'cupcake' for relevancy.</p>
+
+         <h2>Query Help</h2>
+
+         <p>By default, the latitude and longitude are set to downtown San Francisco. If you choose to share your location, and are outside San Francisco, you're unlikely to get any data back for a search.</p>
+   
+         <h3>Fixing your location</h3>
+
+         <p>You can fix your location by adding the query parameters <code>?lat=[latitude]&lon=[longitude]</code> to the URL.</p>
+
+         <h3>Setting the radius</h3>
+         
+         <p>You can specify a radius for your search by adding to your query <code>within:[radius]</code>.</p>
+
+         <h2>Source Code</h2>
+         
+         <p>The <a href="https://github.com/apgwoz/truckstop">source code</a> is available under the <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a>.</p>
+      </div>
+      
+      <div class="footer">
+         Made for <a href="https://github.com/uber/coding-challenge-tools">Uber</a>, &copy; 2013 <a href="http://apgwoz.com">Andrew Gwozdziewycz</a>
+      </div>
+   </div>
+</body>
+</html>

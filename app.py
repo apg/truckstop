@@ -81,6 +81,10 @@ def api_roulette():
 def index():
     return template('index')
 
+@route('/about.html')
+def index():
+    return template('about')
+
 
 parser = OptionParser(usage="%prog [options] datafile)")
 parser.add_option("-b", "--bind", dest="host",
